@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
@@ -27,7 +29,8 @@ Route::get('/login/{email}', [UserController::class, 'login']);
 Route::get('/verify/{email}/{otp}', [UserController::class, 'verifyLogin']);
 Route::get('/logout', [UserController::class, 'logout']);
 
-
+//category route
+Route::get('/category-list', [CategoryController::class, 'categoryList']);
 
 //profile route
 Route::post('/create-update-profile', [ProfileController::class, 'createUpdateProfile'])->middleware([TokenAuthentication::class]);
@@ -59,3 +62,8 @@ Route::get('get-invoice', [InvoiceController::class, 'getInvoice'])->middleware(
 Route::post("/payment-success", [InvoiceController::class, 'paymentSuccess']);
 Route::post("/payment-cancel", [InvoiceController::class, 'paymentCancel']);
 Route::post("/payment-fail", [InvoiceController::class, 'paymentFail']);
+
+
+
+//page route
+Route::get('/', [HomeController::class, 'index']);
