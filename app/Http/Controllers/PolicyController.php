@@ -2,26 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
+use App\Models\Policy;
 use Illuminate\Http\Request;
 
-class CategoryController extends Controller
+class PolicyController extends Controller
 {
-    public function categoryPage(Request $request)
+    public function policyPage()
     {
-        return view('pages.product-by-category');
+
+        return view('pages.policy-page');
     }
 
-
-    public function categoryList(Request $request)
+    public function policyByType(Request $request)
     {
         try {
-            $category = Category::all();
+            $policy  = Policy::where('type', $request->type)->first();
+
             return response()->json([
                 'success' => true,
-                'categoryList' => $category
-            ], 200);
+                'policy' => $policy
+            ]);
         } catch (\Exception $e) {
+
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()

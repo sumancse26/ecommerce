@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 
 class ProfileController extends Controller
 {
+    public function profilePage()
+    {
+        return view('pages.profile-page');
+    }
     public function createUpdateProfile(Request $request)
     {
         try {

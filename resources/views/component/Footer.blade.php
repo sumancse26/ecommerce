@@ -5,7 +5,7 @@
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <div class="widget">
                         <div class="footer_logo">
-                            <a href="#"><img src="assets/images/logo_light.png" alt="logo"/></a>
+                            <a href="#"><img src="assets/images/logo_light.png" alt="logo" /></a>
                         </div>
                         <p>If you are going to use of Lorem Ipsum need to be sure there isn't hidden of text</p>
                     </div>
@@ -23,10 +23,10 @@
                     <div class="widget">
                         <h6 class="widget_title">Useful Links</h6>
                         <ul class="widget_links">
-                            <li><a href="/policy?type=about">About Us</a></li>
-                            <li><a href="/policy?type=how to buy">How to Buy</a></li>
-                            <li><a href="/policy?type=contact">Contact</a></li>
-                            <li><a href="/policy?type=complain">Complain</a></li>
+                            <li><a href="/by-policy?type=about">About Us</a></li>
+                            <li><a href="/by-policy?type=how-to-buy">How to Buy</a></li>
+                            <li><a href="/by-policy?type=contact">Contact</a></li>
+                            <li><a href="/by-policy?type=complain">Complain</a></li>
                         </ul>
                     </div>
                 </div>
@@ -34,8 +34,8 @@
                     <div class="widget">
                         <h6 class="widget_title">Legals</h6>
                         <ul class="widget_links">
-                            <li><a href="/policy?type=refund">Refund Policy</a></li>
-                            <li><a href="/policy?type=terms">Terms & Condition</a></li>
+                            <li><a href="/by-policy?type=refund">Refund Policy</a></li>
+                            <li><a href="/by-policy?type=terms">Terms & Condition</a></li>
                         </ul>
                     </div>
                 </div>
@@ -84,7 +84,8 @@
                         <li><a href="#"><img src="assets/images/discover.png" alt="discover"></a></li>
                         <li><a href="#"><img src="assets/images/master_card.png" alt="master_card"></a></li>
                         <li><a href="#"><img src="assets/images/paypal.png" alt="paypal"></a></li>
-                        <li><a href="#"><img src="assets/images/amarican_express.png" alt="amarican_express"></a></li>
+                        <li><a href="#"><img src="assets/images/amarican_express.png" alt="amarican_express"></a>
+                        </li>
                     </ul>
                 </div>
             </div>

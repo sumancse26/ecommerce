@@ -7,6 +7,13 @@ use Illuminate\Http\Request;
 
 class BrandController extends Controller
 {
+    public function brandPage()
+    {
+
+        return view('pages.product-by-brand');
+    }
+
+
     public function brandList(Request $req)
     {
         try {

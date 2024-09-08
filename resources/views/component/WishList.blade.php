@@ -9,7 +9,7 @@
             </div>
             <div class="col-md-6">
                 <ol class="breadcrumb justify-content-md-end">
-                    <li class="breadcrumb-item"><a href="{{url("/")}}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
                     <li class="breadcrumb-item"><a href="#">This Page</a></li>
                 </ol>
             </div>
@@ -29,33 +29,33 @@
 
 
 <script>
-    async function WishList(){
-        let res=await axios.get(`/ProductWishList`);
+    async function wishList() {
+        let res = await axios.get(`/get-wish-list`);
         $("#byList").empty();
-        res.data['data'].forEach((item,i)=>{
-            let EachItem=`<div class="col-lg-3 col-md-4 col-6">
+        res.data.wishList?.forEach((item, i) => {
+            let EachItem = `<div class="col-lg-3 col-md-4 col-6">
                                 <div class="product">
                                     <div class="product_img">
                                         <a href="#">
-                                            <img src="${item['product']['image']}" alt="product_img9">
+                                            <img src="${item.product?.image}" alt="product_img9">
                                         </a>
                                         <div class="product_action_box">
                                             <ul class="list_none pr_action_btn">
-                                                <li><a href="/details?id=${item['product']['id']}" class="popup-ajax"><i class="icon-magnifier-add"></i></a></li>
+                                                <li><a href="/product-details?id=${item.product?.id}" class="popup-ajax"><i class="icon-magnifier-add"></i></a></li>
                                             </ul>
                                         </div>
                                     </div>
                                     <div class="product_info">
-                                        <h6 class="product_title"><a href="/details?id=${item['product']['id']}">${item['product']['title']}</a></h6>
+                                        <h6 class="product_title"><a href="/product-details?id=${item.product?.id}">${item.product?.title}</a></h6>
                                         <div class="product_price">
-                                            <span class="price">$ ${item['product']['price']}</span>
+                                            <span class="price">$ ${item.product?.price}</span>
                                         </div>
                                         <div class="rating_wrap">
                                             <div class="rating">
-                                                <div class="product_rate" style="width:${item['product']['star']}%"></div>
+                                                <div class="product_rate" style="width:${item.product?.star}%"></div>
                                             </div>
                                         </div>
-                                        <button class="btn remove btn-sm my-2 btn-danger" data-id="${item['product']['id']}">Remove</button>
+                                        <button class="btn remove btn-sm my-2 btn-danger" data-id="${item.product?.id}" >Remove</button>
 
                                     </div>
                                 </div>
@@ -64,24 +64,20 @@
         })
 
 
-        $(".remove").on('click',function () {
-            let id= $(this).data('id');
-            RemoveWishList(id);
+        $(".remove").on('click', function() {
+            let id = $(this).data('id');
+            removeWishList(id);
         })
-
-
     }
 
-  async function RemoveWishList(id){
-      $(".preloader").delay(90).fadeIn(100).removeClass('loaded');
-        let res=await axios.get("/RemoveWishList/"+id);
-      $(".preloader").delay(90).fadeOut(100).addClass('loaded');
-        if(res.status===200) {
-            await WishList();
-        }
-        else{
+    async function removeWishList(id) {
+        $(".preloader").delay(90).fadeIn(100).removeClass('loaded');
+        let res = await axios.delete("/delete-wish-list/" + id);
+        $(".preloader").delay(90).fadeOut(100).addClass('loaded');
+        if (res.data.success) {
+            await wishList();
+        } else {
             alert("Request Fail")
         }
     }
-
 </script>

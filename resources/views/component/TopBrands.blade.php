@@ -5,7 +5,8 @@
                 <div class="heading_s4 text-center">
                     <h2>Top Brands</h2>
                 </div>
-                <p class="text-center leads">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus blandit massa enim Nullam nunc varius.</p>
+                <p class="text-center leads">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus blandit
+                    massa enim Nullam nunc varius.</p>
             </div>
         </div>
         <div id="TopBrandItem" class="row align-items-center">
@@ -18,16 +19,16 @@
 
 <script>
     TopBrands();
-    async function TopBrands(){
-        let res=await axios.get("/BrandList");
+    async function TopBrands() {
+        let res = await axios.get("/brand-list");
         $("#TopBrandItem").empty()
-        res.data['data'].forEach((item,i)=>{
-            let EachItem= `<div class="p-2 col-2">
+        res.data.brandList.forEach((item, i) => {
+            let EachItem = `<div class="p-2 col-2">
                 <div class="item">
                     <div class="categories_box">
-                        <a href="/by-brand?id=${item['id']}">
-                            <img src="${item['brandImg']}" alt="cat_img1"/>
-                            <span>${item['brandName']}</span>
+                        <a href="/by-brand?id=${item.id}">
+                            <img src="${item.brandImg}" alt="cat_img1"/>
+                            <span>${item.brandName}</span>
                         </a>
                     </div>
                 </div>

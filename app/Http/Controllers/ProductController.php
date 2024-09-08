@@ -13,6 +13,19 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+
+    public function productDtlPage()
+    {
+        return view('pages.details-page');
+    }
+    public function wishListPage()
+    {
+        return view('pages.wish-list-page');
+    }
+    public function cartListPage()
+    {
+        return view('pages.cart-list-page');
+    }
     public function productListByCategory(Request $req)
     {
         try {
@@ -153,8 +166,8 @@ class ProductController extends Controller
         try {
             $userId = $req->header('userId');
             $data = ProductWish::updateOrCreate(
-                ['user_id' => $userId, 'product_id' => $req->input('product_id')],
-                ['user_id' => $userId, 'product_id' => $req->input('product_id')]
+                ['user_id' => $userId, 'product_id' => $req->product_id],
+                ['user_id' => $userId, 'product_id' => $req->product_id]
             );
             return response()->json([
                 'success' => true

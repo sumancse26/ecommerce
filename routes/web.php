@@ -4,6 +4,7 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
@@ -14,7 +15,20 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+//page route
+Route::get('/', [HomeController::class, 'index']);
+Route::get('by-category', [CategoryController::class, 'categoryPage']);
+Route::get('by-brand', [BrandController::class, 'brandPage']);
+Route::get('by-policy', [PolicyController::class, 'policyPage']);
+Route::get('product-details', [ProductController::class, 'productDtlPage']);
+Route::get('login-page', [UserController::class, 'loginPage']);
+Route::get('verify-page', [UserController::class, 'verifyPage']);
+Route::get('wish-page', [ProductController::class, 'wishListPage']);
+Route::get('cart-page', [ProductController::class, 'cartListPage']);
+Route::get('profile', [ProfileController::class, 'profilePage']);
 
+
+//product route
 Route::get('/brand-list', [BrandController::class, 'brandList']);
 Route::get('/product-list-by-category/{category_id}', [ProductController::class, 'productListByCategory']);
 Route::get('/product-list-by-brand/{brand_id}', [ProductController::class, 'productListByBrand']);
@@ -41,7 +55,7 @@ Route::post('/create-update-review', [ProductController::class, 'createUpdateRev
 
 
 //product wish
-Route::post('/create-update-wish', [ProductController::class, 'createUpdateWish'])->middleware([TokenAuthentication::class]);
+Route::get('/create-update-wish/{product_id}', [ProductController::class, 'createUpdateWish'])->middleware([TokenAuthentication::class]);
 Route::get('/get-wish-list', [ProductController::class, 'getWishList'])->middleware([TokenAuthentication::class]);
 Route::delete('/delete-wish-list/{product_id}', [ProductController::class, 'deleteWishList'])->middleware([TokenAuthentication::class]);
 
@@ -55,15 +69,12 @@ Route::delete('/remove-cart/{product_id}', [ProductController::class, 'deleteCar
 //invoice route
 Route::post('/create-invoice', [InvoiceController::class, 'createInvoice'])->middleware([TokenAuthentication::class]);
 Route::get('get-invoice', [InvoiceController::class, 'getInvoice'])->middleware([TokenAuthentication::class]);
+Route::get('get-invoice-product/{id}', [InvoiceController::class, 'getInvoiceProduct'])->middleware([TokenAuthentication::class]);
 
-
+//policy route
+Route::get("/policy-by-type/{type}", [PolicyController::class, 'policyByType']);
 
 //payment
 Route::post("/payment-success", [InvoiceController::class, 'paymentSuccess']);
 Route::post("/payment-cancel", [InvoiceController::class, 'paymentCancel']);
 Route::post("/payment-fail", [InvoiceController::class, 'paymentFail']);
-
-
-
-//page route
-Route::get('/', [HomeController::class, 'index']);

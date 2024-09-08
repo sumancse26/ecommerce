@@ -10,6 +10,14 @@ use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
+    public function loginPage()
+    {
+        return view('pages.login-page');
+    }
+    public function verifyPage()
+    {
+        return view('pages.Verify-page');
+    }
     public function login(Request $request)
     {
         try {
@@ -62,12 +70,9 @@ class UserController extends Controller
 
     public function logout()
     {
-        redirect('/loginPage')->cookie('token', null, -1);
+
         try {
-            return response()->json([
-                'success' => true,
-                'message' => 'Logged out successfully'
-            ], 200);
+            return redirect('/')->cookie('token', '', -1);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,

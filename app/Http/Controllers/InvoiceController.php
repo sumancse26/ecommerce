@@ -17,7 +17,7 @@ class InvoiceController extends Controller
         DB::beginTransaction();
         try {
             $userId = $req->header('userId');
-            $email = $req->header('email');
+            $email = $req->header('userEmail');
 
             $tranId = uniqid();
             $deliveryStatus = "Pending";
@@ -32,6 +32,7 @@ class InvoiceController extends Controller
             $total = ProductCart::where('user_id', $userId)->sum('price');
             $vat = ($total * 5) / 100;  //dynamic next time
             $payable = $total + $vat;
+
             $invoice = Invoice::create([
                 'user_id' => $userId,
                 'total' => $total,
@@ -43,6 +44,8 @@ class InvoiceController extends Controller
                 'delivery_status' => $deliveryStatus,
                 'payment_status' => $paymentStatus
             ]);
+
+
             foreach ($cart as $item) {
                 InvoiceProduct::create([
                     'user_id' => $userId,
@@ -54,11 +57,12 @@ class InvoiceController extends Controller
                 ]);
             }
 
-            SSLCommerz::InitiatePayment($profile, $payable, $tranId, $email);
+            $paymentMethods = SSLCommerz::InitiatePayment($profile, $payable, $tranId, $email);
+
 
             DB::commit();
 
-            return response()->json(['success' => true, 'message' => 'Payment initiated'], 200);
+            return response()->json(['success' => true, 'message' => 'Payment initiated', 'paymentMethods' => $paymentMethods, 'payable' => $payable, 'vat' => $vat, 'total' => $total], 200);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
@@ -75,6 +79,25 @@ class InvoiceController extends Controller
             return response()->json([
                 'success' => true,
                 'invoiceList' => $data
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function getInvoiceProduct(Request $req)
+    {
+
+        try {
+            $data = InvoiceProduct::where('invoice_id', $req->id)->with(['product' => function ($query) {
+                $query->select('id', 'title');
+            }])->get();
+            return response()->json([
+                'success' => true,
+                'invoiceProducts' => $data
             ], 200);
         } catch (\Exception $e) {
             return response()->json([

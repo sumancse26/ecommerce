@@ -6,13 +6,8 @@
     @include('component.Footer')
     <script>
         (async () => {
-            await WishList();
+            await wishList();
             $(".preloader").delay(90).fadeOut(100).addClass('loaded');
         })()
     </script>
 @endsection
-
-
-
-
-

@@ -5,7 +5,8 @@
                 <div class="heading_s4 text-center">
                     <h2>Top Categories</h2>
                 </div>
-                <p class="text-center leads">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus blandit massa enim Nullam nunc varius.</p>
+                <p class="text-center leads">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus blandit
+                    massa enim Nullam nunc varius.</p>
             </div>
         </div>
         <div id="TopCategoryItem" class="row align-items-center">
@@ -18,7 +19,7 @@
 
 <script>
     TopCategory();
-    async function TopCategory(){
+    async function TopCategory() {
         let res = await axios.get("/category-list");
         $("#TopCategoryItem").empty();
 
@@ -34,8 +35,7 @@
                  </div>
              </div>`
 
-             $("#TopCategoryItem").append(category);
+            $("#TopCategoryItem").append(category);
         })
     }
 </script>
-

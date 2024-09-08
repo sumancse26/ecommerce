@@ -10,9 +10,11 @@ use Illuminate\Support\Facades\Http;
 class SSLCommerz
 {
 
+
     static function  InitiatePayment($Profile, $payable, $tran_id, $user_email): array
     {
         try {
+
             $ssl = SslcommerzAccount::first();
             $response = Http::asForm()->post($ssl->init_url, [
                 "store_id" => $ssl->store_id,
@@ -29,19 +31,19 @@ class SSLCommerz
                 "cus_add1" => $Profile->cus_add,
                 "cus_add2" => $Profile->cus_add,
                 "cus_city" => $Profile->cus_city,
-                "cus_state" => $Profile->cus_city,
-                "cus_postcode" => "1200",
+                "cus_state" => $Profile->cus_state,
+                "cus_postcode" => $Profile->cus_postcode,
                 "cus_country" => $Profile->cus_country,
                 "cus_phone" => $Profile->cus_phone,
-                "cus_fax" => $Profile->cus_phone,
+                "cus_fax" => $Profile->cus_fax,
                 "shipping_method" => "YES",
                 "ship_name" => $Profile->ship_name,
                 "ship_add1" => $Profile->ship_add,
                 "ship_add2" => $Profile->ship_add,
                 "ship_city" => $Profile->ship_city,
-                "ship_state" => $Profile->ship_city,
+                "ship_state" => $Profile->ship_state,
                 "ship_country" => $Profile->ship_country,
-                "ship_postcode" => "12000",
+                "ship_postcode" => $Profile->ship_postcode,
                 "product_name" => "Apple Shop Product",
                 "product_category" => "Apple Shop Category",
                 "product_profile" => "Apple Shop Profile",
