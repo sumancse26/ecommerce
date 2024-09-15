@@ -11,10 +11,6 @@ use App\Http\Controllers\UserController;
 use App\Http\Middleware\TokenAuthentication;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 //page route
 Route::get('/', [HomeController::class, 'index']);
 Route::get('by-category', [CategoryController::class, 'categoryPage']);
@@ -39,8 +35,8 @@ Route::get('/product-list-by-slider', [ProductController::class, 'productListByS
 
 
 //user route
-Route::get('/login/{email}', [UserController::class, 'login']);
-Route::get('/verify/{email}/{otp}', [UserController::class, 'verifyLogin']);
+Route::get('/login', [UserController::class, 'login']);
+Route::get('/verify', [UserController::class, 'verifyLogin']);
 Route::get('/logout', [UserController::class, 'logout']);
 
 //category route
