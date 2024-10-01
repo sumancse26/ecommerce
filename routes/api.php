@@ -46,12 +46,12 @@ Route::get('/get-products', [ProductController::class, 'getProducts']);
 //product wish
 Route::get('/create-update-wish/{product_id}', [ProductController::class, 'createUpdateWish'])->middleware([ApiAuth::class]);
 Route::get('/get-wish-list', [ProductController::class, 'getWishList'])->middleware([ApiAuth::class]);
-Route::delete('/delete-wish-list/{product_id}', [ProductController::class, 'deleteWishList'])->middleware([ApiAuth::class]);
+Route::delete('/delete-wish-list/{id}', [ProductController::class, 'deleteWishList'])->middleware([ApiAuth::class]);
 
 //product cart
 Route::post('/create-update-cart', [ProductController::class, 'createUpdateCart'])->middleware([ApiAuth::class]);
 Route::get('/get-cart-list', [ProductController::class, 'getCartList'])->middleware([ApiAuth::class]);
-Route::delete('/remove-cart/{product_id}', [ProductController::class, 'deleteCartList'])->middleware([ApiAuth::class]);
+Route::delete('/remove-cart/{id}', [ProductController::class, 'deleteCartList'])->middleware([ApiAuth::class]);
 
 //invoice route
 Route::post('/create-invoice', [InvoiceController::class, 'createInvoice'])->middleware([ApiAuth::class]);

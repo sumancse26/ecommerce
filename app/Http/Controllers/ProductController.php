@@ -220,10 +220,11 @@ class ProductController extends Controller
     {
         try {
             $data = ProductWish::where('user_id', $req->header('userId'))
-                ->where('product_id', $req->product_id)
+                ->where('id', $req->id)
                 ->delete();
             return response()->json([
-                'success' => true
+                'success' => true,
+                'message' => 'Item deleted successfully'
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
@@ -236,30 +237,37 @@ class ProductController extends Controller
     public function createUpdateCart(Request $req)
     {
         try {
+            $inputData =  $req->input();
+
             $userId = $req->header('userId');
-            $product = Product::where(['id' => $req->input('product_id')])->first();
+            $postData = array_map(function ($item) use ($userId) {
+                $product = Product::where(['id' => $item['product_id']])->first();
 
-            $unitPrice = 0;
-            if ($product->discount == 1) {
-                $unitPrice = $product->discount;
-            } else {
-                $unitPrice = $product->price;
-            };
+                $unitPrice = 0;
 
-            $totalPrice = $unitPrice * ($req->input('qty') ?? 1);
+                if ($product->discount == 1) {
+                    $unitPrice = $product->discount_price;
+                } else {
+                    $unitPrice = $product->price;
+                };
 
 
-            $data = ProductCart::updateOrCreate(
-                ['product_id' => $req->input('product_id'), 'user_id' => $userId,],
-                [
-                    'user_id' => $userId,
-                    'product_id' => $req->input('product_id'),
-                    'color' => $req->input('color') ?? 'Blue',
-                    'size' => $req->input('size') ?? 'xl',
-                    'qty' => $req->input('qty') ?? 1,
-                    'price' => $totalPrice,
-                ]
-            );
+                $totalPrice = $unitPrice * ($item['qty'] ?? 1);
+                $data = ProductCart::updateOrCreate(
+                    ['product_id' => $item['product_id'], 'user_id' => $userId],
+                    [
+                        'id' => $item['id'] ?? null,
+                        'product_id' => $item['product_id'],
+                        'qty' => $item['qty'] ?? 1,
+                        'color' => $item['color'] ?? '',
+                        'size' => $item['size'] ?? '',
+                        'price' => $totalPrice,
+                        'user_id' => $userId,
+                    ]
+                );
+            }, $inputData);
+
+
             return response()->json([
                 'success' => true,
                 'message' => 'Product added to cart successfully',
@@ -295,7 +303,7 @@ class ProductController extends Controller
     {
         try {
             $data = ProductCart::where('user_id', $req->header('userId'))
-                ->where('product_id', $req->product_id)
+                ->where('id', $req->id)
                 ->delete();
             return response()->json([
                 'success' => true
