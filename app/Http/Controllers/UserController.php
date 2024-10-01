@@ -43,17 +43,21 @@ class UserController extends Controller
     public function verifyLogin(Request $request)
     {
         try {
-            $email = $request->email;
-            $otp = $request->otp;
+            $email = $request->input('email');
+            $otp = $request->input('otp');
+
+
             $userInfo = User::where('email', $email)->where('otp', $otp)->first();
+
             if ($userInfo) {
-                User::where('email', $email)->update(['otp' => '0']);
+
                 $token = JWTToken::generateToken($email, $userInfo->id);
+                $userInfo->update(['otp' => '0']);
                 return response()->json([
                     'success' => true,
                     'message' => 'OTP verified successfully',
                     'token' => $token
-                ], 200)->cookie('token', $token, time() + 24 * 60 * 60,);
+                ], 200)->cookie('token', $token, time() + 24 * 60 * 60, "/");
             } else {
                 return response()->json([
                     'success' => false,
@@ -72,7 +76,11 @@ class UserController extends Controller
     {
 
         try {
-            return redirect('/')->cookie('token', '', -1);
+            return response()->json([
+                'success' => true,
+                'message' => 'Logout successfully',
+                'token' => ''
+            ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,

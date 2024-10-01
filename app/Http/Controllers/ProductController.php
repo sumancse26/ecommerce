@@ -26,6 +26,22 @@ class ProductController extends Controller
     {
         return view('pages.cart-list-page');
     }
+
+    public function getProducts(Request $req)
+    {
+        try {
+            $products = Product::all();
+            return response()->json([
+                'success' => true,
+                'products' => $products
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
     public function productListByCategory(Request $req)
     {
         try {
@@ -221,7 +237,7 @@ class ProductController extends Controller
     {
         try {
             $userId = $req->header('userId');
-            $product = Product::where(['id' => $req->product_id])->first();
+            $product = Product::where(['id' => $req->input('product_id')])->first();
 
             $unitPrice = 0;
             if ($product->discount == 1) {
@@ -230,22 +246,23 @@ class ProductController extends Controller
                 $unitPrice = $product->price;
             };
 
-            $totalPrice = $unitPrice * $req->input('qty');
+            $totalPrice = $unitPrice * ($req->input('qty') ?? 1);
 
 
             $data = ProductCart::updateOrCreate(
-                ['product_id' => $req->input('product_id')],
+                ['product_id' => $req->input('product_id'), 'user_id' => $userId,],
                 [
                     'user_id' => $userId,
                     'product_id' => $req->input('product_id'),
-                    'color' => $req->input('color'),
-                    'size' => $req->input('size'),
-                    'qty' => $req->input('qty'),
+                    'color' => $req->input('color') ?? 'Blue',
+                    'size' => $req->input('size') ?? 'xl',
+                    'qty' => $req->input('qty') ?? 1,
                     'price' => $totalPrice,
                 ]
             );
             return response()->json([
-                'success' => true
+                'success' => true,
+                'message' => 'Product added to cart successfully',
             ], 200);
         } catch (\Exception $e) {
             return response()->json([

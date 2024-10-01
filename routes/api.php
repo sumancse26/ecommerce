@@ -11,7 +11,7 @@ use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
-use App\Http\Middleware\TokenAuthentication;
+use App\Http\Middleware\ApiAuth;
 
 
 
@@ -28,34 +28,35 @@ Route::get('/product-list-by-slider', [ProductController::class, 'productListByS
 
 //user route
 Route::get('/login', [UserController::class, 'login']);
-Route::get('/verify', [UserController::class, 'verifyLogin']);
+Route::post('/verify', [UserController::class, 'verifyLogin']);
 Route::get('/logout', [UserController::class, 'logout']);
 
 //category route
 Route::get('/category-list', [CategoryController::class, 'categoryList']);
 
 //profile route
-Route::post('/create-update-profile', [ProfileController::class, 'createUpdateProfile'])->middleware([TokenAuthentication::class]);
-Route::get('/get-profile', [ProfileController::class, 'getProfile'])->middleware([TokenAuthentication::class]);
+Route::post('/create-update-profile', [ProfileController::class, 'createUpdateProfile'])->middleware([ApiAuth::class]);
+Route::get('/get-profile', [ProfileController::class, 'getProfile'])->middleware([ApiAuth::class]);
 
 //product review
-Route::post('/create-update-review', [ProductController::class, 'createUpdateReview'])->middleware([TokenAuthentication::class]);
+Route::post('/create-update-review', [ProductController::class, 'createUpdateReview'])->middleware([ApiAuth::class]);
+Route::get('/get-products', [ProductController::class, 'getProducts']);
 
 
 //product wish
-Route::get('/create-update-wish/{product_id}', [ProductController::class, 'createUpdateWish'])->middleware([TokenAuthentication::class]);
-Route::get('/get-wish-list', [ProductController::class, 'getWishList'])->middleware([TokenAuthentication::class]);
-Route::delete('/delete-wish-list/{product_id}', [ProductController::class, 'deleteWishList'])->middleware([TokenAuthentication::class]);
+Route::get('/create-update-wish/{product_id}', [ProductController::class, 'createUpdateWish'])->middleware([ApiAuth::class]);
+Route::get('/get-wish-list', [ProductController::class, 'getWishList'])->middleware([ApiAuth::class]);
+Route::delete('/delete-wish-list/{product_id}', [ProductController::class, 'deleteWishList'])->middleware([ApiAuth::class]);
 
 //product cart
-Route::post('/create-update-cart', [ProductController::class, 'createUpdateCart'])->middleware([TokenAuthentication::class]);
-Route::get('/get-cart-list', [ProductController::class, 'getCartList'])->middleware([TokenAuthentication::class]);
-Route::delete('/remove-cart/{product_id}', [ProductController::class, 'deleteCartList'])->middleware([TokenAuthentication::class]);
+Route::post('/create-update-cart', [ProductController::class, 'createUpdateCart'])->middleware([ApiAuth::class]);
+Route::get('/get-cart-list', [ProductController::class, 'getCartList'])->middleware([ApiAuth::class]);
+Route::delete('/remove-cart/{product_id}', [ProductController::class, 'deleteCartList'])->middleware([ApiAuth::class]);
 
 //invoice route
-Route::post('/create-invoice', [InvoiceController::class, 'createInvoice'])->middleware([TokenAuthentication::class]);
-Route::get('get-invoice', [InvoiceController::class, 'getInvoice'])->middleware([TokenAuthentication::class]);
-Route::get('get-invoice-product/{id}', [InvoiceController::class, 'getInvoiceProduct'])->middleware([TokenAuthentication::class]);
+Route::post('/create-invoice', [InvoiceController::class, 'createInvoice'])->middleware([ApiAuth::class]);
+Route::get('get-invoice', [InvoiceController::class, 'getInvoice'])->middleware([ApiAuth::class]);
+Route::get('get-invoice-product/{id}', [InvoiceController::class, 'getInvoiceProduct'])->middleware([ApiAuth::class]);
 
 //policy route
 Route::get("/policy-by-type/{type}", [PolicyController::class, 'policyByType']);
