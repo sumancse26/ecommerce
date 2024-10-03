@@ -9,6 +9,7 @@ use App\Models\InvoiceProduct;
 use App\Models\ProductCart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class InvoiceController extends Controller
 {
@@ -107,11 +108,53 @@ class InvoiceController extends Controller
         }
     }
 
+    public function completeOrder(Request $req)
+    {
+        try {
+            $data = Invoice::where('id', $req->invoice_id)->first();
+            $profile = CustomerProfile::where('user_id', $data->user_id)->first();
+
+            $payable = $data->payable;
+            $tranId = $data->tran_id;
+            $email = $req->header('userEmail');
+
+            $paymentMethods = SSLCommerz::InitiatePayment($profile, $payable, $tranId, $email);
+
+            return response()->json([
+                'success' => true,
+                'paymentMethods' => $paymentMethods
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
 
     function paymentSuccess(Request $request)
     {
         SSLCommerz::InitiateSuccess($request->query('tran_id'));
         return redirect('/profile');
+    }
+    public function apiPaymentSuccess(Request $request)
+    {
+        // Initiate the success process and get the updated invoice
+        $invoice = SSLCommerz::InitiateSuccess($request->input('tran_id'));
+
+        if ($invoice) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Payment successful',
+                'invoice' => $invoice,
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invoice not found or payment update failed',
+            ], 404);
+        }
     }
 
 
@@ -120,15 +163,26 @@ class InvoiceController extends Controller
         SSLCommerz::InitiateCancel($request->query('tran_id'));
         return redirect('/profile');
     }
+    function apiPaymentCancel(Request $request)
+    {
+        SSLCommerz::InitiateCancel($request->query('tran_id'));
+        // return redirect('/profile');
+    }
 
     function paymentFail(Request $request)
     {
         return SSLCommerz::InitiateFail($request->query('tran_id'));
         return redirect('/profile');
     }
+    function apiPaymentFail(Request $request)
+    {
+        return SSLCommerz::InitiateFail($request->query('tran_id'));
+        // return redirect('/profile');
+    }
 
     function paymentIPN(Request $request)
     {
+        Log::info($request->all());
         return SSLCommerz::InitiateIPN($request->input('tran_id'), $request->input('status'), $request->input('val_id'));
     }
 }

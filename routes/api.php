@@ -57,13 +57,14 @@ Route::delete('/remove-cart/{id}', [ProductController::class, 'deleteCartList'])
 Route::post('/create-invoice', [InvoiceController::class, 'createInvoice'])->middleware([ApiAuth::class]);
 Route::get('get-invoice', [InvoiceController::class, 'getInvoice'])->middleware([ApiAuth::class]);
 Route::get('get-invoice-product/{id}', [InvoiceController::class, 'getInvoiceProduct'])->middleware([ApiAuth::class]);
+Route::get('complete-order/{invoice_id}', [InvoiceController::class, 'completeOrder'])->middleware([ApiAuth::class]);
 
 //policy route
 Route::get("/policy-by-type/{type}", [PolicyController::class, 'policyByType']);
 
 //payment
-Route::post("/payment-success", [InvoiceController::class, 'paymentSuccess']);
-Route::post("/payment-cancel", [InvoiceController::class, 'paymentCancel']);
-Route::post("/payment-fail", [InvoiceController::class, 'paymentFail']);
+Route::post("/payment-success", [InvoiceController::class, 'apiPaymentSuccess']);
+Route::post("/payment-cancel", [InvoiceController::class, 'apiPaymentCancel']);
+Route::post("/payment-fail", [InvoiceController::class, 'apiPaymentFail']);
 
 Route::post("/payment-ipn", [InvoiceController::class, 'paymentIPN']);

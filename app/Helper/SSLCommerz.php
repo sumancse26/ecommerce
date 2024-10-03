@@ -6,6 +6,7 @@ use App\Models\Invoice;
 use App\Models\SslcommerzAccount;
 use Exception;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class SSLCommerz
 {
@@ -57,36 +58,51 @@ class SSLCommerz
 
 
 
-    static function InitiateSuccess($tran_id): int
+    public static function InitiateSuccess($tran_id)
     {
-        Invoice::where(['tran_id' => $tran_id, 'val_id' => 0])->update(['payment_status' => 'Success']);
-        return 1;
+
+        Invoice::where('tran_id', $tran_id)
+            ->where('val_id', 0)
+            ->update(['payment_status' => 'Success']);
+
+
+        $invoice = Invoice::where('tran_id', $tran_id)
+            ->where('val_id', 0)
+            ->first();
+
+        return $invoice;
+    }
+
+    static function InitiateFail($tran_id)
+    {
+        $invoice = Invoice::where(['tran_id' => $tran_id, 'val_id' => 0])->update(['payment_status' => 'Fail']);
+        return response()->json([
+            'success' => false,
+            'message' => 'Payment failed',
+            'data' => $invoice
+        ]);
     }
 
 
 
-
-
-
-
-
-    static function InitiateFail($tran_id): int
+    static function InitiateCancel($tran_id)
     {
-        Invoice::where(['tran_id' => $tran_id, 'val_id' => 0])->update(['payment_status' => 'Fail']);
-        return 1;
+        $invoice = Invoice::where(['tran_id' => $tran_id, 'val_id' => 0])->update(['payment_status' => 'Cancel']);
+        return response()->json([
+            'success' => false,
+            'message' => 'Payment cancel',
+            'data' => $invoice
+        ]);
     }
 
-
-
-    static function InitiateCancel($tran_id): int
+    static function InitiateIPN($tran_id, $status, $val_id)
     {
-        Invoice::where(['tran_id' => $tran_id, 'val_id' => 0])->update(['payment_status' => 'Cancel']);
-        return 1;
-    }
-
-    static function InitiateIPN($tran_id, $status, $val_id): int
-    {
-        Invoice::where(['tran_id' => $tran_id, 'val_id' => 0])->update(['payment_status' => $status, 'val_id' => $val_id]);
-        return 1;
+        Log::info($tran_id, $status, $val_id);
+        $invoice = Invoice::where(['tran_id' => $tran_id, 'val_id' => 0])->update(['payment_status' => $status, 'val_id' => $val_id]);
+        return response()->json([
+            'success' => false,
+            'message' => 'Payment initiate',
+            'data' => $invoice
+        ]);
     }
 }

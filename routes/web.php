@@ -71,6 +71,6 @@ Route::get('get-invoice-product/{id}', [InvoiceController::class, 'getInvoicePro
 Route::get("/policy-by-type/{type}", [PolicyController::class, 'policyByType']);
 
 //payment
-Route::post("/payment-success", [InvoiceController::class, 'paymentSuccess']);
-Route::post("/payment-cancel", [InvoiceController::class, 'paymentCancel']);
-Route::post("/payment-fail", [InvoiceController::class, 'paymentFail']);
+// Route::post("/payment-success", [InvoiceController::class, 'paymentSuccess']);
+// Route::post("/payment-cancel", [InvoiceController::class, 'paymentCancel']);
+// Route::post("/payment-fail", [InvoiceController::class, 'paymentFail']);

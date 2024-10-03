@@ -21,6 +21,7 @@ class ApiAuth
                 return response()->json(['message' => 'Unauthorized'], 401);
             }
             $decodedToken = JWTToken::decodeToken($token);
+
             $request->headers->set('userEmail', $decodedToken->email);
             $request->headers->set('userId', $decodedToken->userId);
             return $next($request);
