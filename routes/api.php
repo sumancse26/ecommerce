@@ -68,3 +68,5 @@ Route::post("/payment-cancel", [InvoiceController::class, 'apiPaymentCancel']);
 Route::post("/payment-fail", [InvoiceController::class, 'apiPaymentFail']);
 
 Route::post("/payment-ipn", [InvoiceController::class, 'paymentIPN']);
+
+Route::get("/success", [InvoiceController::class, 'successInfo'])->name("success_url");

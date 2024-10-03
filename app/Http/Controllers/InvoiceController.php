@@ -56,6 +56,8 @@ class InvoiceController extends Controller
                     'qty' => $item->qty
 
                 ]);
+
+                $item->delete();
             }
 
             $paymentMethods = SSLCommerz::InitiatePayment($profile, $payable, $tranId, $email);
@@ -140,13 +142,13 @@ class InvoiceController extends Controller
     }
     public function apiPaymentSuccess(Request $request)
     {
-        // Initiate the success process and get the updated invoice
         $invoice = SSLCommerz::InitiateSuccess($request->input('tran_id'));
 
         if ($invoice) {
             return response()->json([
                 'success' => true,
                 'message' => 'Payment successful',
+                'tran_id' => $invoice->tran_id,
                 'invoice' => $invoice,
             ]);
         } else {
